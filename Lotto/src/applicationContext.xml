@@ -8,6 +8,7 @@
   
 <bean id="menu" class="hu.lotto.Menu">
 <property name="menuValaszto" value="sima"></property>
+<property name="huzasSzama" value="100"></property>
 </bean>  
  
 </beans>

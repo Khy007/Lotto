@@ -7,7 +7,15 @@ import java.util.Scanner;
 public class Menu {
 	
 	private String menuValaszto;
-	private static ArrayList<String> kihuzottSzamokEddig = new ArrayList<>();
+	private int huzasSzama;
+
+	public int getHuzasSzama() {
+		return huzasSzama;
+	}
+
+	public void setHuzasSzama(int huzasSzama) {
+		this.huzasSzama = huzasSzama;
+	}
 
 	public String getMenuValaszto() {
 		return menuValaszto;
@@ -30,27 +38,28 @@ public class Menu {
 		
 				int valasztas = sc.nextInt();		
 					switch(valasztas){
-					case 1:
-						int[] szamok = null;
+					case 1:						
 						try {
-							szamok = Huzas.szamHuzas();
+							for (int i=0; i<huzasSzama; i++) {
+								Huzas.szamHuzas();
+							}
 						} catch (Exception e) {
-							System.out.println("Nem sikerült a húzás, ajjajj");
 							e.printStackTrace();
-						}
-		                System.out.println("A kihúzott számok: " + Arrays.toString(szamok));
-		                Menu.kihuzottSzamokEddig.add(Arrays.toString(szamok));		  
-					  break;
+						}					
+						break;
 					case 2:
 						int[] szamok1 = null;
 						int[] leggyakoribbHarom = Kereses.findMostFrequent(szamok1);
 		                System.out.println("A leggyakoribb három szám: " + Arrays.toString(leggyakoribbHarom));
+		                System.out.println();
 					  break;
 					case 3:
-						
 						System.out.println("A tömb tartalma: " );
-						for (int i=0; i<Menu.kihuzottSzamokEddig.size(); i++) {
-							System.out.print(Menu.kihuzottSzamokEddig.get(i));
+						for (int i = 0; i < Huzas.getKihuzottSzamokEddig().size(); i++) {
+							System.out.print(String.format("%3d", Huzas.getKihuzottSzamokEddig().get(i)));
+						    if ((i + 1) % 5 == 0) {
+						        System.out.println();
+						    }
 						}
 					  break;
 					case 4:
@@ -68,13 +77,5 @@ public class Menu {
 	
 		}
 
-	public static ArrayList<String> getKihuzottSzamokEddig() {
-		return kihuzottSzamokEddig;
-	}
-
-	public static void setKihuzottSzamokEddig(ArrayList<String> kihuzottSzamokEddig) {
-		Menu.kihuzottSzamokEddig = kihuzottSzamokEddig;
-		
-	}
 }
 
