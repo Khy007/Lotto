@@ -1,9 +1,55 @@
 package hu.lotto;
 
+import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class Kereses {
+	
+	private int bestOf;
+	
+	public int getBestOf() {
+		return bestOf;
+	}
+
+	public void setBestOf(int bestOf) {
+		this.bestOf = bestOf;
+	}
+
+	public void dbSearch() {
+		try {
+			Connection dbconnect = DriverManager.getConnection(Huzas.szerverC, Huzas.szerverF, Huzas.szerverJL);		
+			System.out.println("SQL szerver CONNECTED!:)");
+			
+			PreparedStatement preparedStatement = dbconnect.prepareStatement("SELECT number, COUNT(*) AS count FROM "
+					+ "(SELECT szam1 AS number FROM otosLotto "
+					+ "UNION ALL SELECT szam2 FROM otosLotto "
+					+ "UNION ALL SELECT szam3 FROM otosLotto "
+					+ "UNION ALL SELECT szam4 FROM otosLotto "
+					+ "UNION ALL SELECT szam5 FROM otosLotto ) AS numbers "
+					+ "GROUP BY number "
+					+ "ORDER BY count "
+					+ "DESC LIMIT 3;");
+			
+			ResultSet resultset = preparedStatement.executeQuery();
+			
+			while (resultset.next()) {
+				String aLeggyakoribb = resultset.getString("number");
+				String aElofordulas = resultset.getString("count");
+				System.out.println("Szám: "+aLeggyakoribb+" ennyiszer> " + aElofordulas);
+			}
+			preparedStatement.close();
+			
+		}catch (SQLException e) {
+			System.out.println("Csatlakozás nem pipa :(");
+		}
+	}
+
 	
 	
 	public static int[] findMostFrequent(int[] szamHuzasok) {
@@ -45,9 +91,20 @@ public class Kereses {
             map.remove(key);
         }
         
-	    
 	    return result;
 	}
-
+	
+	public void proc() {
+		int[] szamok1 = null;
+		int[] leggyakoribbHarom = Kereses.findMostFrequent(szamok1);
+        System.out.println("A leggyakoribb három szám: " + Arrays.toString(leggyakoribbHarom));
+        System.out.println();
+        
+        System.out.println("Adatbázis szerint: ");
+        dbSearch();
+        System.out.println();
+		
+	}
+	
 }
 
