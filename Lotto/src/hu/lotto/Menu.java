@@ -15,8 +15,6 @@ import org.springframework.core.io.Resource;
 
 public class Menu {
 	
-	Resource resource = new ClassPathResource("applicationContext.xml");
-	BeanFactory factory = new XmlBeanFactory(resource);
 	private String menuValaszto;
 	
 
@@ -39,16 +37,17 @@ public class Menu {
 				int valasztas = sc.nextInt();		
 				switch(valasztas){
 				case 1:	
-					Huzas huzas=(Huzas)factory.getBean("huzas");
+					Huzas huzas=(Huzas)Program.factory.getBean("huzas");
 					huzas.proc();		
 					break;
 				case 2:
-					Kereses kereses=(Kereses)factory.getBean("kereses");
+					Kereses kereses=(Kereses)Program.factory.getBean("kereses");
+					System.out.println("A leggyakoribb "+kereses.getBestOf() +" szamok: " );
 					kereses.proc();      
 				  break;
 				case 3:
-					System.out.println("A tömb tartalma: " );
-					Kiolvas kiolvas=(Kiolvas)factory.getBean("kiolvas");
+					System.out.println("A tomb tartalma: " );
+					Kiolvas kiolvas=(Kiolvas)Program.factory.getBean("kiolvas");
 					kiolvas.proc(); 
 					
 /*					for (int i = 0; i < Huzas.getKihuzottSzamokEddig().size(); i++) {
@@ -66,7 +65,7 @@ public class Menu {
 							System.out.println("SQL szerver CONNECTED!:)");
 							
 							PreparedStatement preparedStatement = dbconnect.prepareStatement("TRUNCATE TABLE otosLotto");
-							System.out.println("Az adattábla kiürítve!");
+							System.out.println("Az adattabla kiuritve!");
 							preparedStatement.executeUpdate();
 							preparedStatement.close();
 							

@@ -20,7 +20,7 @@ public class Kereses {
 	public void setBestOf(int bestOf) {
 		this.bestOf = bestOf;
 	}
-
+	
 	public void dbSearch() {
 		try {
 			Connection dbconnect = DriverManager.getConnection(Huzas.szerverC, Huzas.szerverF, Huzas.szerverJL);		
@@ -34,14 +34,14 @@ public class Kereses {
 					+ "UNION ALL SELECT szam5 FROM otosLotto ) AS numbers "
 					+ "GROUP BY number "
 					+ "ORDER BY count "
-					+ "DESC LIMIT 3;");
+					+ "DESC LIMIT " + Integer.toString(bestOf)+ ";");
 			
 			ResultSet resultset = preparedStatement.executeQuery();
 			
 			while (resultset.next()) {
 				String aLeggyakoribb = resultset.getString("number");
 				String aElofordulas = resultset.getString("count");
-				System.out.println("Szám: "+aLeggyakoribb+" ennyiszer> " + aElofordulas);
+				System.out.println("Szam: "+aLeggyakoribb+" ennyiszer fordul elo> " + aElofordulas);
 			}
 			preparedStatement.close();
 			
@@ -52,8 +52,9 @@ public class Kereses {
 
 	
 	
-	public static int[] findMostFrequent(int[] szamHuzasok) {
+	public static int[] findMostFrequent(int[] szamHuzasok, int bestOf) {
 	    
+		
 		 // Egy HashMap, ami tárolja a számok előfordulási gyakoriságát
         HashMap<Integer, Integer> map = new HashMap<>();
         for (int num : Huzas.getKihuzottSzamokEddig()) {
@@ -68,10 +69,10 @@ public class Kereses {
         }
 
         // Egy tömb, ami tárolja a 3 leggyakoribb számot
-        int[] result = new int[3];
+        int[] result = new int[bestOf];
 
         // Egy ciklus, ami 3-szor ismétlődik
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < bestOf; i++) {
             // Egy változó, ami tárolja a legnagyobb gyakoriságú számot
             int max = 0;
             // Egy változó, ami tárolja a legnagyobb gyakoriságú szám kulcsát
@@ -96,9 +97,12 @@ public class Kereses {
 	
 	public void proc() {
 		int[] szamok1 = null;
-		int[] leggyakoribbHarom = Kereses.findMostFrequent(szamok1);
-        System.out.println("A leggyakoribb három szám: " + Arrays.toString(leggyakoribbHarom));
+		int[] leggyakoribbHarom = Kereses.findMostFrequent(szamok1, bestOf);
+        System.out.println("Java HasMap szerint: ");
+		System.out.println(Arrays.toString(leggyakoribbHarom));
         System.out.println();
+        
+        //Eltérés lehet, ha a legtöbb "bestOf"-értékben vannak egyenlő számban előforduló értékek!
         
         System.out.println("Adatbázis szerint: ");
         dbSearch();

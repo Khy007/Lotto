@@ -15,11 +15,11 @@
 </bean>  
 
 <bean id="kereses" class="hu.lotto.Kereses">
-<property name="bestOf" value="3"></property>
+<property name="bestOf" value="5"></property>
 </bean>
 
 <bean id="kiolvas" class="hu.lotto.Kiolvas">
-<property name="mennyiAdat" value="25"></property>
+<property name="mennyiAdat" value="50"></property>
 </bean>  
 
   
